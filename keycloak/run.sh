@@ -1,0 +1,1 @@
+docker run -d -p 8443:8443 -p 8080:8080 -p 9990:9990 --name npes-keycloak npes-keycloak

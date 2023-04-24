@@ -1,0 +1,6 @@
+projectKey=NPES-UI
+serverUrl=https://av-sq.azurewebsites.net
+serverVersion=8.9.1.44547
+dashboardUrl=https://av-sq.azurewebsites.net/dashboard?id=NPES-UI
+ceTaskId=AXo7COAcQdadgvE9Vv1s
+ceTaskUrl=https://av-sq.azurewebsites.net/api/ce/task?id=AXo7COAcQdadgvE9Vv1s

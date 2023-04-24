@@ -1,0 +1,1 @@
+docker run -d -p 8082:8082 --name npes-demo npes-demo

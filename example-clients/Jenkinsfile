@@ -1,0 +1,42 @@
+node ('swarm') {
+  try {
+    stage ('Checkout') {
+      checkout scm
+    }
+    stage('Build') {
+      docker.image('maven:3.8.1-openjdk-8-slim').inside() {
+        dir("spring-server"){
+        sh '''
+          mvn clean package
+        '''
+        }
+      }
+    }
+    stage('SonarQube analysis') {
+      withSonarQubeEnv('sonarqube') {
+        def scannerHome = tool 'SonarScanner 4.0';
+        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=NPES -Dsonar.java.binaries=./target/classes -Dsonar.host.url=https://av-sq.azurewebsites.net -Dsonar.login=10515c06e1beb7617673a5e5a34cae3459129d7d"
+      }
+    }
+    stage('Archive') {
+        archiveArtifacts artifacts: 'target/*.war'
+    }
+    stage ('Docker Build KEYCLOAK') {
+      def branch = scm.branches[0].name.replaceAll('/', '-')
+      sh "docker build -t registry:5043/aviture/npes-keycloak:${branch} ."
+      sh "docker tag registry:5043/aviture/npes-keycloak:${branch} registry:5043/aviture/npes-keycloak:latest"
+    }
+    stage ('Docker Push KEYCLOAK') {
+      def branch = scm.branches[0].name.replaceAll('/', '-')
+      sh "docker push registry:5043/aviture/npes-keycloak:${branch}"
+      sh 'docker push registry:5043/aviture/npes-keycloak'
+      docker.withRegistry('http://registry:5043') {
+            sh 'docker push registry:5043/aviture/npes-keycloak:latest'
+      }
+    }
+  } catch (e) {
+    slackSend (color: '#E50914', channel: '@aaron.gilliland', message: "${env.JOB_NAME} ${env.BUILD_NUMBER} build has failed.")
+    currentBuild.result = "FAILED"
+    throw e
+  }
+}
