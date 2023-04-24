@@ -1,0 +1,22 @@
+---
+- name: "Generate {{ user.name }}'s LDAP password."
+  shell: "slappasswd -s {{ user.userPassword }}"
+  register: slap_passwd
+
+- name: "Get attributes for {{ user.name }}."
+  set_fact:
+    attributes: "{{ user.attributes | combine({'userPassword': slap_passwd.stdout})}}"
+    user_attr: "{{ 'uid' if 'uid' in user.attributes else 'cn' }}"
+    user_value: "{{ user.attributes['uid' if 'uid' in user.attributes else 'cn'] }}"
+
+- name: "Create LDAP user {{ user.name }}."
+  ldap_entry:
+    bind_dn: "cn=Manager,dc=npes,dc=navy,dc=mil"
+    bind_pw: "{{ ldap_admin_pwd }}"
+    dn: "{{ user_attr }}={{ user_value }},{{ ldap_users_dn }}"
+    objectClass:
+      - inetOrgPerson
+      - person
+    attributes: "{{ attributes }}"
+
+...

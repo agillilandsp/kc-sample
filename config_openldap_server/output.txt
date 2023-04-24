@@ -1,0 +1,283 @@
+ansible-playbook 2.9.21
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = [u'/home/devops/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python2.7/site-packages/ansible
+  executable location = /usr/bin/ansible-playbook
+  python version = 2.7.5 (default, Aug  4 2017, 00:39:18) [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)]
+Using /etc/ansible/ansible.cfg as config file
+host_list declined parsing /etc/ansible/hosts as it did not pass its verify_file() method
+script declined parsing /etc/ansible/hosts as it did not pass its verify_file() method
+auto declined parsing /etc/ansible/hosts as it did not pass its verify_file() method
+Parsed /etc/ansible/hosts inventory source with ini plugin
+Skipping callback 'actionable', as we already have a stdout callback.
+Skipping callback 'counter_enabled', as we already have a stdout callback.
+Skipping callback 'debug', as we already have a stdout callback.
+Skipping callback 'dense', as we already have a stdout callback.
+Skipping callback 'dense', as we already have a stdout callback.
+Skipping callback 'full_skip', as we already have a stdout callback.
+Skipping callback 'json', as we already have a stdout callback.
+Skipping callback 'minimal', as we already have a stdout callback.
+Skipping callback 'null', as we already have a stdout callback.
+Skipping callback 'oneline', as we already have a stdout callback.
+Skipping callback 'selective', as we already have a stdout callback.
+Skipping callback 'skippy', as we already have a stdout callback.
+Skipping callback 'stderr', as we already have a stdout callback.
+Skipping callback 'unixy', as we already have a stdout callback.
+Skipping callback 'yaml', as we already have a stdout callback.
+
+PLAYBOOK: main.yml *************************************************************
+1 plays in main.yml
+
+PLAY [localhost] ***************************************************************
+
+TASK [Gathering Facts] *********************************************************
+task path: /media/psf/Home/dev/sandboxes/npes/config_openldap_server/main.yml:4
+<127.0.0.1> ESTABLISH LOCAL CONNECTION FOR USER: devops
+<127.0.0.1> EXEC /bin/sh -c 'echo ~devops && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo /home/devops/.ansible/tmp `"&& mkdir "` echo /home/devops/.ansible/tmp/ansible-tmp-1624042571.65-17213-54139304577325 `" && echo ansible-tmp-1624042571.65-17213-54139304577325="` echo /home/devops/.ansible/tmp/ansible-tmp-1624042571.65-17213-54139304577325 `" ) && sleep 0'
+Using module file /usr/lib/python2.7/site-packages/ansible/modules/system/setup.py
+<127.0.0.1> PUT /home/devops/.ansible/tmp/ansible-local-17201CWB6L7/tmpvnH8zj TO /home/devops/.ansible/tmp/ansible-tmp-1624042571.65-17213-54139304577325/AnsiballZ_setup.py
+<127.0.0.1> EXEC /bin/sh -c 'chmod u+x /home/devops/.ansible/tmp/ansible-tmp-1624042571.65-17213-54139304577325/ /home/devops/.ansible/tmp/ansible-tmp-1624042571.65-17213-54139304577325/AnsiballZ_setup.py && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c '/usr/bin/python2 /home/devops/.ansible/tmp/ansible-tmp-1624042571.65-17213-54139304577325/AnsiballZ_setup.py && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c 'rm -f -r /home/devops/.ansible/tmp/ansible-tmp-1624042571.65-17213-54139304577325/ > /dev/null 2>&1 && sleep 0'
+ok: [localhost]
+META: ran handlers
+
+TASK [config_openldap_server : Configure the LDAP Server] **********************
+task path: /media/psf/Home/dev/sandboxes/npes/config_openldap_server/roles/config_openldap_server/tasks/main.yml:14
+included: /media/psf/Home/dev/sandboxes/npes/config_openldap_server/roles/config_openldap_server/tasks/configureLDAP_server.yml for localhost
+
+TASK [config_openldap_server : Register LDAP password (~root LDAP)] ************
+task path: /media/psf/Home/dev/sandboxes/npes/config_openldap_server/roles/config_openldap_server/tasks/configureLDAP_server.yml:1
+<127.0.0.1> ESTABLISH LOCAL CONNECTION FOR USER: devops
+<127.0.0.1> EXEC /bin/sh -c 'echo ~devops && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo /home/devops/.ansible/tmp `"&& mkdir "` echo /home/devops/.ansible/tmp/ansible-tmp-1624042572.78-17279-162975624792817 `" && echo ansible-tmp-1624042572.78-17279-162975624792817="` echo /home/devops/.ansible/tmp/ansible-tmp-1624042572.78-17279-162975624792817 `" ) && sleep 0'
+Using module file /usr/lib/python2.7/site-packages/ansible/modules/commands/command.py
+<127.0.0.1> PUT /home/devops/.ansible/tmp/ansible-local-17201CWB6L7/tmp1mUvZW TO /home/devops/.ansible/tmp/ansible-tmp-1624042572.78-17279-162975624792817/AnsiballZ_command.py
+<127.0.0.1> EXEC /bin/sh -c 'chmod u+x /home/devops/.ansible/tmp/ansible-tmp-1624042572.78-17279-162975624792817/ /home/devops/.ansible/tmp/ansible-tmp-1624042572.78-17279-162975624792817/AnsiballZ_command.py && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c '/usr/bin/python2 /home/devops/.ansible/tmp/ansible-tmp-1624042572.78-17279-162975624792817/AnsiballZ_command.py && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c 'rm -f -r /home/devops/.ansible/tmp/ansible-tmp-1624042572.78-17279-162975624792817/ > /dev/null 2>&1 && sleep 0'
+changed: [localhost] => {
+    "changed": true, 
+    "cmd": "/sbin/slappasswd -s \"admin\"", 
+    "delta": "0:00:00.019927", 
+    "end": "2021-06-18 13:56:13.016295", 
+    "invocation": {
+        "module_args": {
+            "_raw_params": "/sbin/slappasswd -s \"admin\"", 
+            "_uses_shell": true, 
+            "argv": null, 
+            "chdir": null, 
+            "creates": null, 
+            "executable": null, 
+            "removes": null, 
+            "stdin": null, 
+            "stdin_add_newline": true, 
+            "strip_empty_ends": true, 
+            "warn": true
+        }
+    }, 
+    "rc": 0, 
+    "start": "2021-06-18 13:56:12.996368", 
+    "stderr": "", 
+    "stderr_lines": [], 
+    "stdout": "{SSHA}aNnn2E7NRt7BG7syUKktVGJa9dwB4skg", 
+    "stdout_lines": [
+        "{SSHA}aNnn2E7NRt7BG7syUKktVGJa9dwB4skg"
+    ]
+}
+
+TASK [config_openldap_server : Register LDAP password (admin service)] *********
+task path: /media/psf/Home/dev/sandboxes/npes/config_openldap_server/roles/config_openldap_server/tasks/configureLDAP_server.yml:5
+<127.0.0.1> ESTABLISH LOCAL CONNECTION FOR USER: devops
+<127.0.0.1> EXEC /bin/sh -c 'echo ~devops && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo /home/devops/.ansible/tmp `"&& mkdir "` echo /home/devops/.ansible/tmp/ansible-tmp-1624042573.12-17308-222117559765163 `" && echo ansible-tmp-1624042573.12-17308-222117559765163="` echo /home/devops/.ansible/tmp/ansible-tmp-1624042573.12-17308-222117559765163 `" ) && sleep 0'
+Using module file /usr/lib/python2.7/site-packages/ansible/modules/commands/command.py
+<127.0.0.1> PUT /home/devops/.ansible/tmp/ansible-local-17201CWB6L7/tmp2yQTfD TO /home/devops/.ansible/tmp/ansible-tmp-1624042573.12-17308-222117559765163/AnsiballZ_command.py
+<127.0.0.1> EXEC /bin/sh -c 'chmod u+x /home/devops/.ansible/tmp/ansible-tmp-1624042573.12-17308-222117559765163/ /home/devops/.ansible/tmp/ansible-tmp-1624042573.12-17308-222117559765163/AnsiballZ_command.py && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c '/usr/bin/python2 /home/devops/.ansible/tmp/ansible-tmp-1624042573.12-17308-222117559765163/AnsiballZ_command.py && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c 'rm -f -r /home/devops/.ansible/tmp/ansible-tmp-1624042573.12-17308-222117559765163/ > /dev/null 2>&1 && sleep 0'
+changed: [localhost] => {
+    "changed": true, 
+    "cmd": "/sbin/slappasswd -s \"admin\"", 
+    "delta": "0:00:00.005765", 
+    "end": "2021-06-18 13:56:13.249985", 
+    "invocation": {
+        "module_args": {
+            "_raw_params": "/sbin/slappasswd -s \"admin\"", 
+            "_uses_shell": true, 
+            "argv": null, 
+            "chdir": null, 
+            "creates": null, 
+            "executable": null, 
+            "removes": null, 
+            "stdin": null, 
+            "stdin_add_newline": true, 
+            "strip_empty_ends": true, 
+            "warn": true
+        }
+    }, 
+    "rc": 0, 
+    "start": "2021-06-18 13:56:13.244220", 
+    "stderr": "", 
+    "stderr_lines": [], 
+    "stdout": "{SSHA}kCMP6Y2lpkqTUa30g1COUhmXVmgP8ycb", 
+    "stdout_lines": [
+        "{SSHA}kCMP6Y2lpkqTUa30g1COUhmXVmgP8ycb"
+    ]
+}
+
+TASK [config_openldap_server : Create admin account and set password] **********
+task path: /media/psf/Home/dev/sandboxes/npes/config_openldap_server/roles/config_openldap_server/tasks/configureLDAP_server.yml:10
+<127.0.0.1> ESTABLISH LOCAL CONNECTION FOR USER: devops
+<127.0.0.1> EXEC /bin/sh -c 'echo ~devops && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo /home/devops/.ansible/tmp `"&& mkdir "` echo /home/devops/.ansible/tmp/ansible-tmp-1624042573.34-17334-214405029993097 `" && echo ansible-tmp-1624042573.34-17334-214405029993097="` echo /home/devops/.ansible/tmp/ansible-tmp-1624042573.34-17334-214405029993097 `" ) && sleep 0'
+Using module file /usr/lib/python2.7/site-packages/ansible/modules/net_tools/ldap/ldap_attr.py
+<127.0.0.1> PUT /home/devops/.ansible/tmp/ansible-local-17201CWB6L7/tmpSQQBhZ TO /home/devops/.ansible/tmp/ansible-tmp-1624042573.34-17334-214405029993097/AnsiballZ_ldap_attr.py
+<127.0.0.1> EXEC /bin/sh -c 'chmod u+x /home/devops/.ansible/tmp/ansible-tmp-1624042573.34-17334-214405029993097/ /home/devops/.ansible/tmp/ansible-tmp-1624042573.34-17334-214405029993097/AnsiballZ_ldap_attr.py && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c '/usr/bin/python2 /home/devops/.ansible/tmp/ansible-tmp-1624042573.34-17334-214405029993097/AnsiballZ_ldap_attr.py && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c 'rm -f -r /home/devops/.ansible/tmp/ansible-tmp-1624042573.34-17334-214405029993097/ > /dev/null 2>&1 && sleep 0'
+The full traceback is:
+Traceback (most recent call last):
+  File "/tmp/ansible_ldap_attr_payload_aMONzn/ansible_ldap_attr_payload.zip/ansible/modules/net_tools/ldap/ldap_attr.py", line 208, in exact
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 552, in search_s
+    return self.search_ext_s(base,scope,filterstr,attrlist,attrsonly,None,None,timeout=self.timeout)
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 546, in search_ext_s
+    return self.result(msgid,all=1,timeout=timeout)[1]
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 458, in result
+    resp_type, resp_data, resp_msgid = self.result2(msgid,all,timeout)
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 462, in result2
+    resp_type, resp_data, resp_msgid, resp_ctrls = self.result3(msgid,all,timeout)
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 469, in result3
+    resp_ctrl_classes=resp_ctrl_classes
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 476, in result4
+    ldap_result = self._ldap_call(self._l.result4,msgid,all,timeout,add_ctrls,add_intermediates,add_extop)
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 99, in _ldap_call
+    result = func(*args,**kwargs)
+NO_SUCH_OBJECT: {'desc': 'No such object'}
+<127.0.0.1> EXEC /bin/sh -c 'echo ~devops && sleep 0'
+failed: [localhost] (item={u'name': u'olcSuffix', u'value': u'dc=npes,dc=navy,dc=mil'}) => {
+    "ansible_loop_var": "item", 
+    "changed": false, 
+    "details": "{'desc': 'No such object'}", 
+    "invocation": {
+        "module_args": {
+            "bind_dn": null, 
+            "bind_pw": "", 
+            "dn": "olcDatabase={2}hdb, cn=config", 
+            "name": "olcSuffix", 
+            "params": null, 
+            "server_uri": "ldapi:///", 
+            "start_tls": false, 
+            "state": "exact", 
+            "validate_certs": true, 
+            "values": "dc=npes,dc=navy,dc=mil"
+        }
+    }, 
+    "item": {
+        "name": "olcSuffix", 
+        "value": "dc=npes,dc=navy,dc=mil"
+    }, 
+    "msg": "Cannot search for attribute olcSuffix"
+}
+<127.0.0.1> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo /home/devops/.ansible/tmp `"&& mkdir "` echo /home/devops/.ansible/tmp/ansible-tmp-1624042573.61-17334-54565375800981 `" && echo ansible-tmp-1624042573.61-17334-54565375800981="` echo /home/devops/.ansible/tmp/ansible-tmp-1624042573.61-17334-54565375800981 `" ) && sleep 0'
+Using module file /usr/lib/python2.7/site-packages/ansible/modules/net_tools/ldap/ldap_attr.py
+<127.0.0.1> PUT /home/devops/.ansible/tmp/ansible-local-17201CWB6L7/tmpCojptj TO /home/devops/.ansible/tmp/ansible-tmp-1624042573.61-17334-54565375800981/AnsiballZ_ldap_attr.py
+<127.0.0.1> EXEC /bin/sh -c 'chmod u+x /home/devops/.ansible/tmp/ansible-tmp-1624042573.61-17334-54565375800981/ /home/devops/.ansible/tmp/ansible-tmp-1624042573.61-17334-54565375800981/AnsiballZ_ldap_attr.py && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c '/usr/bin/python2 /home/devops/.ansible/tmp/ansible-tmp-1624042573.61-17334-54565375800981/AnsiballZ_ldap_attr.py && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c 'rm -f -r /home/devops/.ansible/tmp/ansible-tmp-1624042573.61-17334-54565375800981/ > /dev/null 2>&1 && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c 'echo ~devops && sleep 0'
+The full traceback is:
+Traceback (most recent call last):
+  File "/tmp/ansible_ldap_attr_payload_OGSBoF/ansible_ldap_attr_payload.zip/ansible/modules/net_tools/ldap/ldap_attr.py", line 208, in exact
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 552, in search_s
+    return self.search_ext_s(base,scope,filterstr,attrlist,attrsonly,None,None,timeout=self.timeout)
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 546, in search_ext_s
+    return self.result(msgid,all=1,timeout=timeout)[1]
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 458, in result
+    resp_type, resp_data, resp_msgid = self.result2(msgid,all,timeout)
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 462, in result2
+    resp_type, resp_data, resp_msgid, resp_ctrls = self.result3(msgid,all,timeout)
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 469, in result3
+    resp_ctrl_classes=resp_ctrl_classes
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 476, in result4
+    ldap_result = self._ldap_call(self._l.result4,msgid,all,timeout,add_ctrls,add_intermediates,add_extop)
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 99, in _ldap_call
+    result = func(*args,**kwargs)
+NO_SUCH_OBJECT: {'desc': 'No such object'}
+failed: [localhost] (item={u'name': u'olcRootDN', u'value': u'cn=Manager,dc=npes,dc=navy,dc=mil'}) => {
+    "ansible_loop_var": "item", 
+    "changed": false, 
+    "details": "{'desc': 'No such object'}", 
+    "invocation": {
+        "module_args": {
+            "bind_dn": null, 
+            "bind_pw": "", 
+            "dn": "olcDatabase={2}hdb, cn=config", 
+            "name": "olcRootDN", 
+            "params": null, 
+            "server_uri": "ldapi:///", 
+            "start_tls": false, 
+            "state": "exact", 
+            "validate_certs": true, 
+            "values": "cn=Manager,dc=npes,dc=navy,dc=mil"
+        }
+    }, 
+    "item": {
+        "name": "olcRootDN", 
+        "value": "cn=Manager,dc=npes,dc=navy,dc=mil"
+    }, 
+    "msg": "Cannot search for attribute olcRootDN"
+}
+<127.0.0.1> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo /home/devops/.ansible/tmp `"&& mkdir "` echo /home/devops/.ansible/tmp/ansible-tmp-1624042573.75-17334-68618573269878 `" && echo ansible-tmp-1624042573.75-17334-68618573269878="` echo /home/devops/.ansible/tmp/ansible-tmp-1624042573.75-17334-68618573269878 `" ) && sleep 0'
+Using module file /usr/lib/python2.7/site-packages/ansible/modules/net_tools/ldap/ldap_attr.py
+<127.0.0.1> PUT /home/devops/.ansible/tmp/ansible-local-17201CWB6L7/tmpcBl2kS TO /home/devops/.ansible/tmp/ansible-tmp-1624042573.75-17334-68618573269878/AnsiballZ_ldap_attr.py
+<127.0.0.1> EXEC /bin/sh -c 'chmod u+x /home/devops/.ansible/tmp/ansible-tmp-1624042573.75-17334-68618573269878/ /home/devops/.ansible/tmp/ansible-tmp-1624042573.75-17334-68618573269878/AnsiballZ_ldap_attr.py && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c '/usr/bin/python2 /home/devops/.ansible/tmp/ansible-tmp-1624042573.75-17334-68618573269878/AnsiballZ_ldap_attr.py && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c 'rm -f -r /home/devops/.ansible/tmp/ansible-tmp-1624042573.75-17334-68618573269878/ > /dev/null 2>&1 && sleep 0'
+The full traceback is:
+Traceback (most recent call last):
+  File "/tmp/ansible_ldap_attr_payload_pl5Egd/ansible_ldap_attr_payload.zip/ansible/modules/net_tools/ldap/ldap_attr.py", line 208, in exact
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 552, in search_s
+    return self.search_ext_s(base,scope,filterstr,attrlist,attrsonly,None,None,timeout=self.timeout)
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 546, in search_ext_s
+    return self.result(msgid,all=1,timeout=timeout)[1]
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 458, in result
+    resp_type, resp_data, resp_msgid = self.result2(msgid,all,timeout)
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 462, in result2
+    resp_type, resp_data, resp_msgid, resp_ctrls = self.result3(msgid,all,timeout)
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 469, in result3
+    resp_ctrl_classes=resp_ctrl_classes
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 476, in result4
+    ldap_result = self._ldap_call(self._l.result4,msgid,all,timeout,add_ctrls,add_intermediates,add_extop)
+  File "/usr/lib64/python2.7/site-packages/ldap/ldapobject.py", line 99, in _ldap_call
+    result = func(*args,**kwargs)
+NO_SUCH_OBJECT: {'desc': 'No such object'}
+failed: [localhost] (item={u'name': u'olcRootPW', u'value': u'{SSHA}aNnn2E7NRt7BG7syUKktVGJa9dwB4skg'}) => {
+    "ansible_loop_var": "item", 
+    "changed": false, 
+    "details": "{'desc': 'No such object'}", 
+    "invocation": {
+        "module_args": {
+            "bind_dn": null, 
+            "bind_pw": "", 
+            "dn": "olcDatabase={2}hdb, cn=config", 
+            "name": "olcRootPW", 
+            "params": null, 
+            "server_uri": "ldapi:///", 
+            "start_tls": false, 
+            "state": "exact", 
+            "validate_certs": true, 
+            "values": "{SSHA}aNnn2E7NRt7BG7syUKktVGJa9dwB4skg"
+        }
+    }, 
+    "item": {
+        "name": "olcRootPW", 
+        "value": "{SSHA}aNnn2E7NRt7BG7syUKktVGJa9dwB4skg"
+    }, 
+    "msg": "Cannot search for attribute olcRootPW"
+}
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=4    changed=2    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+

@@ -1,0 +1,17 @@
+# This role configures the openldap server
+
+---
+
+# - name: Create Groups
+#   include_tasks: create_ldap_group.yml
+
+# - name: Create Users
+#   include_tasks: create_ldap_user.yml
+
+# - name: Add User to Group
+#   include_tasks: add_user_to_role.yml
+
+- name: Configure the LDAP Server
+  include_tasks: configureLDAP_server.yml
+
+...

@@ -1,0 +1,1 @@
+docker run -d -p 389:389 -p 636:636 --name npes-ldap npes-ldap 

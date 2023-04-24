@@ -1,0 +1,216 @@
+- name: Register LDAP password (~root LDAP)
+  shell: /sbin/slappasswd -s "{{ ldap_admin_pwd }}"
+  register: slapd_passwd_ldap_admin_pwd
+
+- name: Register LDAP password (admin service)
+  shell: /sbin/slappasswd -s "{{ ldap_admin_service_pwd }}"
+  register: slapd_passwd_ldap_admin_service_pwd
+
+#ldapadmin.ldif
+- name: Create admin account and set password
+  ldap_attr:
+    dn: "olcDatabase={2}hdb,cn=config"
+    name: "{{ item.name }}"
+    values: "{{ item.value }}"
+    state: "exact"
+  with_items:
+    - { name: "olcSuffix", value: "dc=npes,dc=navy,dc=mil" }
+    - { name: "olcRootDN", value: "cn=Manager,dc=npes,dc=navy,dc=mil"}
+    - { name: "olcRootPW", value: "{{ slapd_passwd_ldap_admin_pwd.stdout }}" }
+
+- name: Run shell to setup password policy
+  shell: "ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/ppolicy.ldif"
+  register: pw_setup
+  failed_when: 'pw_setup.rc != 0 and not ("Duplicate attributeType" in pw_setup.stderr)'
+
+- name: Run shell to setup LDAP database
+  shell: "ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif"
+  register: pw_setup2
+  failed_when: 'pw_setup2.rc != 0 and not ("Duplicate attributeType" in pw_setup2.stderr)'
+
+- name: Run shell to setup LDAP database
+  shell: "ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif"
+  register: pw_setup3
+  failed_when: 'pw_setup3.rc != 0 and not ("Duplicate attributeType" in pw_setup3.stderr)'
+
+# moduledb-add.ldif
+- name: Link to ldap libraries
+  ldap_entry:
+    dn: "cn=module{0},cn=config"
+    objectClass:
+      - olcModuleList
+    attributes:
+      cn: "module{0}"
+      olcModulePath: "/usr/lib64/openldap"
+
+# ppolicymodule-add.ldif
+- name: Add password policies
+  ldap_attr:
+    dn: "cn=module{0}, cn=config"
+    name: olcModuleLoad
+    values: ppolicy.la
+    state: present
+  register: ppolicymodule
+  failed_when: no
+
+# ppolicymodule-configure.ldif
+- name: Configure password policies
+  ldap_entry:
+    dn: "olcOverlay=ppolicy,olcDatabase={2}hdb,cn=config"
+    objectClass:
+      - olcOverlayConfig
+      - olcPPolicyConfig
+    attributes:
+      olcOverlay: ppolicy
+      olcPPolicyDefault: cn=passwordDefault,ou=policies,ou=v1,dc=npes,dc=navy,dc=mil
+      olcPPolicyHashCleartext: 'TRUE'
+      olcPPolicyUseLockout: 'FALSE'
+      olcPPolicyForwardUpdates: 'FALSE'
+
+# initialContext.ldif
+- name: Add root context
+  ldap_entry:
+    dn: "dc=npes,dc=navy,dc=mil"
+    bind_dn: "cn=Manager,dc=npes,dc=navy,dc=mil"
+    bind_pw: "{{ ldap_admin_pwd }}"
+    objectClass:
+      - organization
+      - dcObject
+    attributes:
+      o: nswcdd
+      dc: npes
+
+- name: Add schema versioning
+  ldap_entry:
+    dn: "ou=v1,dc=npes,dc=navy,dc=mil"
+    bind_dn: "cn=Manager,dc=npes,dc=navy,dc=mil"
+    bind_pw: "{{ ldap_admin_pwd }}"
+    objectClass:
+      - organizationalUnit
+    attributes:
+      ou: v1
+
+- name: "Add organizational unit {{ item }}."
+  ldap_entry:
+    dn: "ou={{ item }},ou=v1,dc=npes,dc=navy,dc=mil"
+    bind_dn: "cn=Manager,dc=npes,dc=navy,dc=mil"
+    bind_pw: "{{ ldap_admin_pwd }}"
+    objectClass:
+      - organizationalUnit
+    attributes:
+      ou: "{{ item }}"
+  with_items:
+    - users
+    - groups
+    - roles
+    - policies
+
+- name: Add admin ldap service account.  This service acts on npes useres behalf
+  ldap_entry:
+    dn: "cn=admin.ldap.service,{{ ldap_users_dn }}"
+    objectClass:
+      - inetOrgPerson
+      - top
+    bind_dn: "cn=Manager,dc=npes,dc=navy,dc=mil"
+    bind_pw: "{{ ldap_admin_pwd }}"
+    attributes:
+      cn: admin.ldap.service
+      sn: admin.ldap.service
+      userPassword: "{{ slapd_passwd_ldap_admin_service_pwd.stdout }}"
+      pwdPolicySubentry: cn=passwordNoExpire,ou=policies,ou=v1,dc=npes,dc=navy,dc=mil
+
+- name: "Add a no expiration policy"
+  ldap_entry:
+    dn: "cn=passwordNoExpire,ou=policies,ou=v1,dc=npes,dc=navy,dc=mil"
+    objectClass:
+      - pwdPolicy
+      - person
+      - top
+    bind_dn: "cn=Manager,dc=npes,dc=navy,dc=mil"
+    bind_pw: "{{ ldap_admin_pwd }}"
+    attributes:
+      cn: passwordNoExpire
+      sn: passwordNoExpire
+      pwdAttribute: userPassword
+      pwdCheckQuality: 2
+      pwdMinAge: 0
+      pwdMaxAge: 0
+      pwdMinLength: 15
+      pwdInHistory: 5
+      pwdMaxFailure: 3
+      pwdFailureCountInterval: 0
+      pwdLockout: 'TRUE'
+      pwdLockoutDuration: 0
+      pwdAllowUserChange: 'TRUE'
+      pwdExpireWarning: 0
+      pwdGraceAuthNLimit: 0
+      pwdMustChange: 'TRUE'
+      pwdSafeModify: 'FALSE'
+
+- name: Add the default policy
+  ldap_entry:
+    dn: "cn=passwordDefault,ou=policies,ou=v1,dc=npes,dc=navy,dc=mil"
+    objectClass:
+      - pwdPolicy
+      - person
+      - top
+    bind_dn: "cn=Manager,dc=npes,dc=navy,dc=mil"
+    bind_pw: "{{ ldap_admin_pwd }}"
+    attributes:
+      cn: passwordDefault
+      sn: passwordDefault
+      pwdAttribute: userPassword
+      pwdCheckQuality: 2
+      pwdMinAge: 86400
+      pwdMaxAge: 5184000
+      pwdMinLength: 15
+      pwdInHistory: 5
+      pwdMaxFailure: 3
+      pwdFailureCountInterval: 900
+      pwdLockout: 'TRUE'
+      pwdLockoutDuration: 0
+      pwdAllowUserChange: 'TRUE'
+      pwdExpireWarning: 0
+      pwdGraceAuthNLimit: 0
+      pwdMustChange: 'TRUE'
+      pwdSafeModify: 'FALSE'
+
+#ppolicy-acl-update.ldif
+- name: Setup Access
+  ldap_attr:
+    dn: "olcDatabase={2}hdb,cn=config"
+    state: exact
+    name: olcAccess
+    values:
+      - "to attrs=userPassword by dn.exact=\"cn=admin.ldap.service,{{ ldap_users_dn }}\" write by self write by anonymous auth by * none"
+      - "to dn.subtree=\"ou=v1,dc=npes,dc=navy,dc=mil\" by dn.exact=\"cn=admin.ldap.service,{{ ldap_users_dn }}\" write by * read"
+      - "to * by * read"
+
+- name: Delete LDAP user ldap
+  ldap_entry:
+    bind_dn: "cn=Manager,dc=npes,dc=navy,dc=mil"
+    bind_pw: "{{ ldap_admin_pwd }}"
+    dn: "uid=ldap,{{ ldap_users_dn }}"
+    state: absent
+
+- name: Set up application users
+  include_tasks: create_ldap_user.yml
+  with_items: "{{ ldap_users }}"
+  loop_control:
+    loop_var: user
+
+- name: Set up application groups
+  include_tasks: create_ldap_group.yml
+  with_items: "{{ ldap_groups }}"
+
+- name: Set up application roles
+  ldap_entry:
+    dn: "{{ item.dn }}"
+    objectClass:
+      - groupOfNames
+      - top
+    bind_dn: "cn=Manager,dc=npes,dc=navy,dc=mil"
+    bind_pw: " {{ ldap_admin_pwd }}"
+    attributes:
+      member: "{{ item.member }}"
+  with_items: "{{ ldap_roles }}"

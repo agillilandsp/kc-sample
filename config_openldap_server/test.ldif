@@ -1,0 +1,9 @@
+dn: olcDatabase={2}hdb, cn=config
+olcSuffix: dc=npes,dc=navy,dc=mil
+olcRootDN: cn=Manager,dc=npes,dc=navy,dc=mil
+olcRootPW: admin
+
+dn: cn=module{0},cn=config
+objectClass: olcModuleList
+cn: module{0}
+olcModulePath: /usr/lib64/openldap

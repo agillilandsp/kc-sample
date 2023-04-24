@@ -1,0 +1,9 @@
+dn: cn=config
+add: olcTLSCACertificateFile
+olcTLSCACertificateFile: /etc/openldap/certs/cert/ca.cert
+-
+replace: olcTLSCertificateKeyFile
+olcTLSCertificateKeyFile: /etc/openldap/certs/key/{{ host.fqdn }}.key
+-
+replace: olcTLSCertificateFile
+olcTLSCertificateFile: /etc/openldap/certs/cert/{{ host.fqdn }}.crt

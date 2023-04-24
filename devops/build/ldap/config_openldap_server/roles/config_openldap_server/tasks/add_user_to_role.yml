@@ -1,0 +1,11 @@
+---
+- name: Add user to role
+  ldap_attr:
+    bind_dn: "cn=Manager,dc=npes,dc=navy,dc=mil"
+    bind_pw: "{{ ldap_admin_pwd }}"
+    dn: "{{ item.dn }}"
+    name: member
+    values: "{{ item.member }}"
+  tag: createUsers
+
+...

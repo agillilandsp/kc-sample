@@ -1,0 +1,16 @@
+---
+
+- name: Create LDAP group {{ item }}.
+  ldap_entry:
+    bind_dn: "cn=Manager,dc=npes,dc=navy,dc=mil"
+    bind_pw: "{{ ldap_admin_pwd }}"
+    dn: "cn={{ item.name }},{{ ldap_groups_dn }}"
+    objectClass:
+      - groupOfUniqueNames
+    attributes:
+      cn: "{{ item.name }}"
+      uniqueMember: "{{ item.um }}"
+      description: "{{ item.desc }}"
+      ou: groups
+      
+...

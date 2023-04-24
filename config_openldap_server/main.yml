@@ -1,0 +1,12 @@
+# --- represents this file as a playbook
+# ---
+# Use [space]play[space] where play is combination of hosts+tasks
+  - hosts: localhost
+    # Become root user
+    # become: yes
+    # - yum:
+    #    name=wget
+    #    state=absent
+    # Roles to be executed
+    roles:
+    - config_openldap_server

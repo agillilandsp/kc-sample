@@ -1,0 +1,16 @@
+#--db.ldif---!
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: dc=npes,dc=navy,dc=mil
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootDN
+olcRootDN: cn=Manager,dc=npes,dc=navy,dc=mil
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootPW
+olcRootPW: {SSHA}RylGzO6i1yaM3AI0WlbS7iJG2DdZhHCr
+#----------------------------------------#

@@ -1,0 +1,91 @@
+---
+# defaults file for install-openldap
+
+# Ansible LDAP configuration parameters
+ldap_svc: ldap
+ldappass: ldap1
+
+tls_dir: /etc/openldap/certs
+
+ldap_group: ldap
+ca_group: ca
+
+host:
+  name: "{{ inventory_hostname }}"
+  fqdn: "{{ inventory_hostname }}"
+
+ldap_users:
+  - name: defaultuser
+    attributes:
+      cn: defaultuser
+      sn: defaultuser
+    userPassword: "{{ ldappw_npes_defaultuser }}"
+  
+  - name: defaultadmin
+    attributes:
+      cn: defaultadmin
+      sn: defaultadmin
+    userPassword: "{{ ldappw_npes_defaultadmin }}"
+
+  - name: arcgisadmin
+    attributes:
+      uid: arcgisadmin
+      cn: arcgisadmin
+      sn: arcgisadmin
+    userPassword: "{{ ldappw_arcgisadmin }}"
+
+  - name: ldap
+    attributes:
+      uid: ldap
+      cn: JBoss LDAP
+      sn: JLDAP
+    userPassword: "{{ ldappw_jboss_ldap }}"
+
+  - name: jboss
+    attributes:
+      uid: jboss
+      cn: jboss
+      sn: jboss
+    userPassword: "{{ ldappw_jboss_jboss }}"
+
+  - name: devuser
+    attributes:
+      uid: devuser
+      cn: devuser
+      sn: devuser
+    userPassword: "{{ ldappw_jboss_devuser }}"
+
+  - name: AuditAcct
+    attributes:
+      uid: AuditAcct
+      cn: AuditAcct
+      sn: AudditAcct
+    userPassword: "{{ ldappw_jboss_auditacct }}"
+
+# To create a user that can login through the application, cn must be used instead of uid
+ldap_test_users: []
+
+ldap_groups:
+  - name: SuperUsers
+    um: "uid=jboss,{{ ldap_users_dn }}"
+    desc: Management users who have the SuperUser role in JBoss.
+
+  - name: Administrators
+    um: "uid=devuser,{{ ldap_users_dn }}"
+    desc: Management users who have the Administrator role within JBoss
+
+  - name: Auditors
+    um: "uid=Auditors,{{ ldap_users_dn }}"
+    desc: Management users who have the Auditor role within Jboss.
+
+ldap_roles:
+  - dn: "cn=admin,{{ ldap_roles_dn }}"
+    member: "cn=defaultadmin,{{ ldap_users_dn }}"
+  
+  - dn: "cn=arcgisadmin,{{ ldap_roles_dn }}"
+    member: "uid=arcgisadmin,{{ ldap_users_dn }}"
+    
+  - dn: "cn=messageAuth,{{ ldap_roles_dn }}"
+    member: "uid=defaultadmin,{{ ldap_users_dn }}"
+
+    

@@ -1,0 +1,7 @@
+# --- represents this file as a playbook
+# ---
+# Use [space]play[space] where play is combination of hosts+tasks
+  - hosts: localhost
+    # Roles to be executed
+    roles:
+    - config_openldap_server

@@ -1,0 +1,27 @@
+node ('swarm') {
+  try {
+    stage ('Checkout') {
+      checkout scm
+    }
+    stage ('Docker Build LDAP') {
+      dir("build/ldap") {
+        // Changing directory like: sh "cd ./build/ldap"
+        def branch = scm.branches[0].name.replaceAll('/', '-')
+        sh "docker build -t registry:5043/aviture/npes-ldap:${branch} ."
+        sh "docker tag registry:5043/aviture/npes-ldap:${branch} registry:5043/aviture/npes-ldap:latest"
+      }
+    }
+    stage ('Docker Push LDAP') {
+      def branch = scm.branches[0].name.replaceAll('/', '-')
+      sh "docker push registry:5043/aviture/npes-ldap:${branch}"
+      sh 'docker push registry:5043/aviture/npes-ldap'
+      docker.withRegistry('http://registry:5043') {
+            sh 'docker push registry:5043/aviture/npes-ldap:latest'
+      }
+    }
+  } catch (e) {
+    slackSend (color: '#E50914', channel: '@aaron.gilliland', message: "${env.JOB_NAME} ${env.BUILD_NUMBER} build has failed.")
+    currentBuild.result = "FAILED"
+    throw e
+  }
+}

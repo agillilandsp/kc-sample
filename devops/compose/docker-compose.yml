@@ -1,0 +1,30 @@
+version: '3.2'
+
+services:
+  openldap:
+    image: npes-ldap
+    container_name: npes-ldap
+    ports:
+      - 389:389
+      - 636:636
+    restart: unless-stopped
+  keycloak:
+    image: npes-keycloak
+    container_name: npes-keycloak
+    environment: 
+      KEYCLOAK_IMPORT: /home/jboss/jboss-eap-7.3/imports/realm-export_full.json
+    volumes:
+      - ./keycloak/imports:/home/jboss/jboss-eap-7.3/imports
+    command: 
+      - "/home/jboss/jboss-eap-7.3/bin/standalone.sh -b 0.0.0.0 -Dkeycloak.import=/home/jboss/jboss-eap-7.3/imports/realm-export_full.json -Dkeycloak.migration.strategy=OVERWRITE_EXISTING"
+    ports:
+      - 8080:8080
+      - 9990:9990
+      - 8443:8443
+    restart: unless-stopped
+  demo:
+    image: npes-demo
+    container_name: npes-demo
+    ports:
+      - 8082:8082
+    restart: unless-stopped
